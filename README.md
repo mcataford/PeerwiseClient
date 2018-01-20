@@ -16,6 +16,21 @@ PeerwiseClient depends mainly on `requests` and `BeautifulSoup`. The dependencie
 pip install -r requirements.txt
 ```
 
+# Usage
+
+```python
+client = PeerWiseClient()
+
+courses = client.auth("my.user.name", "password", "mcgill_ca")
+
+for course in courses:
+  questions = client.get_unanswered_questions(course)
+
+  for question in questions:
+    question_data = get_question_details(question["id"], "answered")
+    #Do something with the detailed question
+```
+
 # Documentation
 
 ## Authentication
