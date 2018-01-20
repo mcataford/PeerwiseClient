@@ -53,13 +53,18 @@ class PeerwiseClient():
 
     return scores
 
-  def get_own_questions(self, course_code):
+  def get_questions(self, course_code, mode):
 
     self.select_course(course_code)
 
-    get_data = {
-      "cmd": "showUserQuestions"
-    }
+    get_data = dict()
+
+    if mode == "answered":
+      get_data["cmd"] = "showAnsweredQuestions"
+    elif mode == "unanswered":
+      get_data["cmd"] = "showUnansweredQuestions"
+    elif mode =="own":
+      get_data["cmd"] = "showUserQuestions"
 
     resp = self.session.post(self.BASE_URL, data=get_data, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(resp.text, "lxml")
@@ -76,3 +81,12 @@ class PeerwiseClient():
         questions.append(question_data)
 
     return questions
+
+  def get_own_questions(self, course_code):
+    return self.get_questions(course_code, "own")
+
+  def get_unanswered_questions(self, course_code):
+    return self.get_questions(course_code, "unanswered")
+
+  def get_answered_questions(self, course_code):
+    return self.get_questions(course_code, "answered")
