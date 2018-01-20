@@ -33,12 +33,16 @@ class PeerwiseClient():
     
     return course_codes
 
-  def get_user_scores(self, course_code):
+  def select_course(self, course_code):
     get_data = {
       "course_id": course_code
     }
 
-    resp = self.session.post(self.BASE_URL, data=get_data, headers={"User-Agent": "Mozilla/5.0"})
+    return self.session.post(self.BASE_URL, data=get_data, headers={"User-Agent": "Mozilla/5.0"})
+
+  def get_user_scores(self, course_code):
+
+    resp = self.select_course(course_code)
     soup = BeautifulSoup(resp.text, "lxml")
 
     scores = dict()
@@ -51,12 +55,36 @@ class PeerwiseClient():
 
     return scores
 
+  def get_own_questions(self, course_code):
+
+    self.select_course(course_code)
+
+    get_data = {
+      "cmd": "showUserQuestions"
+    }
+
+    resp = self.session.post(self.BASE_URL, data=get_data, headers={"User-Agent": "Mozilla/5.0"})
+    soup = BeautifulSoup(resp.text, "lxml")
+
+    questions = list()
+
+    for question in soup.select("table#basicTable tr"):
+      if question.select(".spaceLeft"):
+        question_data = dict()
+
+        question_data["id"] = int(re.sub('[^0-9]','', question.select(".spaceLeft a")[0].get("href")))
+        question_data["preview"] = question.select("#previewTextFormat")[0].text
+
+        questions.append(question_data)
+
+    return questions
+    
+    
+
 if __name__ == "__main__":
   
   pw_client = PeerwiseClient()
   course_codes = pw_client.auth(USERNAME, PASSWORD, INST_CODE)
 
   for course in course_codes:
-    scores = pw_client.get_user_scores(course)
-    print(scores)
-    
+    print(pw_client.get_own_questions(course))
