@@ -140,6 +140,30 @@ class PeerwiseClient():
 
     return questions
 
+  def get_question_details(self, question_code, mode):
+    """
+    Queries the full question details for the question code attached.
+    @param question_code int Question ID
+    @param mode string Either Unanswered, answered of self question.
+    @return Dictionary containing the question data
+    """
+
+    cmd = None
+
+    if mode == "answered":
+      cmd = "viewAnsweredQuestionDetail"
+    elif mode == "unanswered":
+      cmd = "viewUnansweredQuestionDetail"
+    elif mode == "own":
+      cmd = "viewUserQuestionDetail"
+
+    url_params = "?cmd={}&id={}".format(cmd, question_code)
+
+    resp = self.session.get(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
+
+    print(resp.text)
+
+
   def get_own_questions(self, course_code):
     """
     Gets the user's own questions, uses get_question and mode=="own"

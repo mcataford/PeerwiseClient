@@ -7,4 +7,6 @@ if __name__ == "__main__":
   course_codes = pw_client.auth(USERNAME, PASSWORD, INST_CODE)
 
   for course in course_codes:
-    print(pw_client.get_answered_questions(course))
+    ans_q = pw_client.get_answered_questions(course)
+    print(ans_q[0])
+    pw_client.get_question_details(ans_q[0]["id"], "answered")
