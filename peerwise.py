@@ -160,8 +160,19 @@ class PeerwiseClient():
     url_params = "?cmd={}&id={}".format(cmd, question_code)
 
     resp = self.session.get(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
+    soup = BeautifulSoup(resp.text, "lxml")
 
-    print(resp.text)
+    question_data = dict()
+
+    question_data["text"] = soup.select("#questionDisplay")[0].text
+    question_data["choices"] = list()
+
+    for option in soup.select("#displayQuestionTable tr"):
+      if option.select("#alternativesDisplay"):
+        question_data["choices"].append(option.select("#alternativesDisplay")[0].text)
+
+
+    return question_data
 
 
   def get_own_questions(self, course_code):
