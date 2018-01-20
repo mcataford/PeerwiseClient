@@ -33,7 +33,7 @@ class PeerwiseClient():
     
     return course_codes
 
-  def get_user_score(self, course_code):
+  def get_user_scores(self, course_code):
     get_data = {
       "course_id": course_code
     }
@@ -57,6 +57,6 @@ if __name__ == "__main__":
   course_codes = pw_client.auth(USERNAME, PASSWORD, INST_CODE)
 
   for course in course_codes:
-    scores = pw_client.get_user_score(course)
+    scores = pw_client.get_user_scores(course)
     print(scores)
     
