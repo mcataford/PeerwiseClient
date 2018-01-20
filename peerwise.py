@@ -57,28 +57,43 @@ class PeerwiseClient():
 
     self.select_course(course_code)
 
-    get_data = dict()
-
-    if mode == "answered":
-      get_data["cmd"] = "showAnsweredQuestions"
-    elif mode == "unanswered":
-      get_data["cmd"] = "showUnansweredQuestions"
-    elif mode =="own":
-      get_data["cmd"] = "showUserQuestions"
-
-    resp = self.session.post(self.BASE_URL, data=get_data, headers={"User-Agent": "Mozilla/5.0"})
-    soup = BeautifulSoup(resp.text, "lxml")
-
     questions = list()
 
-    for question in soup.select("table#basicTable tr"):
-      if question.select(".spaceLeft"):
-        question_data = dict()
+    questions_left = True
+    offset = 0
 
-        question_data["id"] = int(re.sub('[^0-9]','', question.select(".spaceLeft a")[0].get("href")))
-        question_data["preview"] = question.select("#previewTextFormat")[0].text
+    while questions_left:
 
-        questions.append(question_data)
+      cmd = None
+
+      if mode == "answered":
+        cmd = "showAnsweredQuestions"
+      elif mode == "unanswered":
+        cmd = "showUnansweredQuestions"
+      elif mode =="own":
+        cmd = "showUserQuestions"
+
+      url_params = "?cmd={}&offset={}".format(cmd, offset)
+
+      resp = self.session.post(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
+      soup = BeautifulSoup(resp.text, "lxml")
+
+      questions_left = False
+
+      for question in soup.select("table#basicTable tr"):
+
+        if question.select("td.spaceLeft"):
+          print(len(questions))
+          questions_left = True
+
+          question_data = dict()
+
+          question_data["id"] = int(re.sub('[^0-9]','', question.select(".spaceLeft a")[0].get("href")))
+          question_data["preview"] = question.select("#previewTextFormat")[0].text
+
+          questions.append(question_data)
+
+      offset += 10
 
     return questions
 
