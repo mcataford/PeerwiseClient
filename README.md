@@ -2,6 +2,8 @@
 
 Python client for the Peerwise peer-quizzing system (https://peerwise.cs.auckland.ac.nz/)
 
+![https://img.shields.io/badge/License-GPLv3-blue.svg]() ![https://img.shields.io/badge/Coverage-Incomplete-yellow.svg]() ![https://img.shields.io/badge/Python-3.5%2B-green.svg]()
+
 # Motivation
 
 This Python wrapper for the Peerwise peer-quizzing system came out of frustration at the clunkiness of Peerwise's current website and the necessity to use it often for certain courses. The idea is to streamline the process of using the service by using a Python client that can provide greater control over the data (i.e. list of questions, comments, etc) and avoid extraneous fiddling with the website's UI.
