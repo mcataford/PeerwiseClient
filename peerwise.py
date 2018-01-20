@@ -83,13 +83,32 @@ class PeerwiseClient():
       for question in soup.select("table#basicTable tr"):
 
         if question.select("td.spaceLeft"):
-          print(len(questions))
           questions_left = True
 
           question_data = dict()
 
+          cells = question.select("td")
+
           question_data["id"] = int(re.sub('[^0-9]','', question.select(".spaceLeft a")[0].get("href")))
           question_data["preview"] = question.select("#previewTextFormat")[0].text
+          question_data["author_reputation"] = int(cells[2].text)
+          question_data["answered_on"] = cells[3].text
+
+          question_status_img = cells[4].select("img")[0].get("src")
+
+          if "fullTick" in question_status_img:
+            question_data["status"] = "Success"
+          elif "authorTick" in question_status_img:
+            question_data["status"] = "Changed"
+          else:
+            question_data["status"] = "Failed"
+          
+          question_data["num_answers"] = int(cells[6].text)
+          question_data["help_requests"] = int(cells[7].text)
+          question_data["recent_comment"] = cells[8].text
+          question_data["num_comments"] = int(cells[9].text)
+          question_data["difficulty"] = cells[10].text
+          question_data["rating"] = float(cells[11].text)
 
           questions.append(question_data)
 
