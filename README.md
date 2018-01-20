@@ -2,7 +2,7 @@
 
 Python client for the Peerwise peer-quizzing system (https://peerwise.cs.auckland.ac.nz/)
 
-![https://img.shields.io/badge/License-GPLv3-blue.svg]() ![https://img.shields.io/badge/Coverage-Incomplete-yellow.svg]() ![https://img.shields.io/badge/Python-3.5%2B-green.svg]()
+![](https://img.shields.io/badge/License-GPLv3-blue.svg) ![](https://img.shields.io/badge/Coverage-Incomplete-yellow.svg) ![](https://img.shields.io/badge/Python-3.5%2B-green.svg)
 
 # Motivation
 
