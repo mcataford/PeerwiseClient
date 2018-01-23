@@ -170,18 +170,25 @@ class PeerwiseClient():
 
     for option in soup.select("#displayQuestionTable tr"):
       if option.select("#alternativesDisplay"):
-        question_data["choices"].append(option.select("#alternativesDisplay")[0].text)
-        
+
+        choice = {
+          "choice_text": option.select("#alternativesDisplay")[0].text,
+        }
+
         if mode == "answered":
           raw_selected = option.select("td.displayGraph")[0].text.split()
 
-          question_data["selected_count"] = int(raw_selected[0])
-          question_data["selected_percentage"] = float(raw_selected[1][1:-2])/100
+          choice["selected_count"] = int(raw_selected[0])
+          choice["selected_percentage"] = float(raw_selected[1][1:-2])/100
 
           raw_confirmed = option.select("td.displayGraph")[1].text.split()
 
-          question_data["confirmed_count"] = int(raw_confirmed[0])
-          question_data["confirmed_percentage"] = float(raw_confirmed[1][1:-2])/100
+          choice["confirmed_count"] = int(raw_confirmed[0])
+          choice["confirmed_percentage"] = float(raw_confirmed[1][1:-2])/100
+
+        question_data["choices"].append(choice)
+        
+        
 
 
     return question_data
