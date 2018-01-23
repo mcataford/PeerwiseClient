@@ -162,7 +162,6 @@ class PeerwiseClient():
     resp = self.session.get(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(resp.text, "lxml")
 
-
     question_data = dict()
 
     question_data["text"] = soup.select("#questionDisplay")[0].text
@@ -187,9 +186,6 @@ class PeerwiseClient():
           choice["confirmed_percentage"] = float(raw_confirmed[1][1:-2])/100
 
         question_data["choices"].append(choice)
-        
-        
-
 
     return question_data
 
@@ -217,3 +213,27 @@ class PeerwiseClient():
     @return List of dict containing the questions
     """
     return self.get_questions(course_code, "answered")
+
+  def get_badges(self, course_code):
+    self.select_course(course_code)
+
+    cmd = "badges"
+
+    url_params = "?cmd={}".format(cmd)
+
+    resp = self.session.post(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
+    soup = BeautifulSoup(resp.text, "lxml")
+
+    badges = list()
+
+    for row in soup.select("table tr"):
+      if row.select(".leftClear"):
+        badge = {
+          "name": row.select("td:nth-of-type(2)")[0].text.replace(" badge", "").strip('"'),
+          "description": row.select("td:nth-of-type(3)")[0].text,
+          "holders": row.select("td:nth-of-type(4)")[0].text.replace("people", "")
+        }
+
+        badges.append(badge)
+
+    return badges
