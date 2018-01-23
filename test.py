@@ -8,5 +8,4 @@ if __name__ == "__main__":
 
   for course in course_codes:
     ans_q = pw_client.get_answered_questions(course)
-    print(ans_q[0])
     print(pw_client.get_question_details(ans_q[0]["id"], "answered"))

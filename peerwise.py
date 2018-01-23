@@ -162,6 +162,7 @@ class PeerwiseClient():
     resp = self.session.get(self.BASE_URL + url_params, headers={"User-Agent": "Mozilla/5.0"})
     soup = BeautifulSoup(resp.text, "lxml")
 
+
     question_data = dict()
 
     question_data["text"] = soup.select("#questionDisplay")[0].text
@@ -170,6 +171,10 @@ class PeerwiseClient():
     for option in soup.select("#displayQuestionTable tr"):
       if option.select("#alternativesDisplay"):
         question_data["choices"].append(option.select("#alternativesDisplay")[0].text)
+        
+        if mode == "answered":
+          question_data["selected"] = option.select("td.displayGraph")[0].text
+          question_data["confirmed"] = option.select("td.displayGraph")[1].text
 
 
     return question_data
