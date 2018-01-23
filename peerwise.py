@@ -173,8 +173,15 @@ class PeerwiseClient():
         question_data["choices"].append(option.select("#alternativesDisplay")[0].text)
         
         if mode == "answered":
-          question_data["selected"] = option.select("td.displayGraph")[0].text
-          question_data["confirmed"] = option.select("td.displayGraph")[1].text
+          raw_selected = option.select("td.displayGraph")[0].text.split()
+
+          question_data["selected_count"] = int(raw_selected[0])
+          question_data["selected_percentage"] = float(raw_selected[1][1:-2])/100
+
+          raw_confirmed = option.select("td.displayGraph")[1].text.split()
+
+          question_data["confirmed_count"] = int(raw_confirmed[0])
+          question_data["confirmed_percentage"] = float(raw_confirmed[1][1:-2])/100
 
 
     return question_data
