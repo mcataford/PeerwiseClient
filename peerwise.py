@@ -215,6 +215,11 @@ class PeerwiseClient():
     return self.get_questions(course_code, "answered")
 
   def get_badges(self, course_code):
+    """
+    Gets the current course badge table.
+    @param course_code
+    @return List of dict containing badges
+    """
     self.select_course(course_code)
 
     cmd = "badges"
